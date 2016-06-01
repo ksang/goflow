@@ -43,13 +43,13 @@ func (e *Echo) UnmarshalBinary(data []byte) error {
 	return nil
 }
 
-func NewEchoRequest(xid uint32) openflow.EchoDecoder {
+func NewEchoRequest(xid uint32) *Echo {
 	return &Echo{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_ECHO_REQUEST, xid),
 	}
 }
 
-func NewEchoReply(xid uint32) openflow.EchoDecoder {
+func NewEchoReply(xid uint32) *Echo {
 	return &Echo{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_ECHO_REPLY, xid),
 	}

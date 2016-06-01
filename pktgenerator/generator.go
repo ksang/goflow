@@ -55,8 +55,7 @@ func (pkt *TCPPacket) Send() error {
 // Send multiple identical packets.
 func SendMany(number int, pkt Generator) error {
 	for i := 0; i < number; i++ {
-		err := pkt.Send()
-		if err != nil {
+		if err := pkt.Send(); err != nil {
 			return err
 		}
 	}
