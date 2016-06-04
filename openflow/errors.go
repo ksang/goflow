@@ -15,5 +15,7 @@ var (
 	ErrMissingIPProtocol     = errors.New("missing IP protocol")
 	ErrMissingEtherType      = errors.New("missing Ethernet type")
 	ErrUnsupportedMatchType  = errors.New("unsupported flow match type")
-	ErrNoDataProvided        = errors.New("No data provided")
+	ErrNoDataProvided        = errors.New("no data provided")
+	ErrInvalidDataLength 	 = errors.New("invalid data length")
+	ErrInvalidValueProvided  = errors.New("invalid value provided")
 )

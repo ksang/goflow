@@ -4,18 +4,18 @@ import(
 	"github.com/ksang/goflow/openflow"
 )
 
-type Echo struct {
+type echo struct {
 	openflow.Message
 	err error
 	data []byte
 }
 
 // Implement EchoDecoder interface
-func (e *Echo) Data() []byte {
+func (e *echo) Data() []byte {
 	return e.data
 }
 
-func (e *Echo) SetData(data []byte) error {
+func (e *echo) SetData(data []byte) error {
 	if data == nil {
 		return openflow.ErrNoDataProvided
 	}
@@ -23,11 +23,11 @@ func (e *Echo) SetData(data []byte) error {
 	return nil
 }
 
-func (e *Echo) Error() error {
+func (e *echo) Error() error {
 	return e.err
 }
 
-func (e *Echo) MarshalBinary() ([]byte, error) {
+func (e *echo) MarshalBinary() ([]byte, error) {
 	if e.err != nil {
 		return nil, e.err
 	}
@@ -35,7 +35,7 @@ func (e *Echo) MarshalBinary() ([]byte, error) {
 	return e.Message.MarshalBinary()
 }
 
-func (e *Echo) UnmarshalBinary(data []byte) error {
+func (e *echo) UnmarshalBinary(data []byte) error {
 	if err := e.Message.UnmarshalBinary(data); err != nil {
 		return err
 	}
@@ -43,14 +43,14 @@ func (e *Echo) UnmarshalBinary(data []byte) error {
 	return nil
 }
 
-func NewEchoRequest(xid uint32) *Echo {
-	return &Echo{
+func NewEchoRequest(xid uint32) openflow.Echo {
+	return &echo{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_ECHO_REQUEST, xid),
 	}
 }
 
-func NewEchoReply(xid uint32) *Echo {
-	return &Echo{
+func NewEchoReply(xid uint32) openflow.Echo {
+	return &echo{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_ECHO_REPLY, xid),
 	}
 }

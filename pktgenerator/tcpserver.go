@@ -31,7 +31,7 @@ func NewTcpServer(laddr string) *TcpServer {
 	}
 }
 
-func (t *TcpServer) Loop(ln net.Listener) {
+func (t *TcpServer) Loop(ln net.Listener, ready chan bool) {
 	var err error
 	go func() {
 		for {
@@ -43,6 +43,7 @@ func (t *TcpServer) Loop(ln net.Listener) {
 			t.conn <- conn
 		}
 	}()
+	ready <- true
 	for {
 		select {
 		case errc := <-t.stopping:
@@ -55,12 +56,14 @@ func (t *TcpServer) Loop(ln net.Listener) {
 }
 
 func (t *TcpServer) Start() error {
+	ready := make(chan bool)
 	ln, err := net.Listen("tcp", t.laddr)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
-	go t.Loop(ln)
+	go t.Loop(ln, ready)
+	<-ready
 	return nil
 }
 

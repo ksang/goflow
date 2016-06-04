@@ -76,7 +76,6 @@ func (m *Message) MarshalBinary() ([]byte, error) {
 	if length > OF_HEADER_SIZE {
 		copy(v[8:], m.payload)
 	}
-
 	return v, nil
 }
 
