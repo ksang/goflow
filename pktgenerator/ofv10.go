@@ -74,8 +74,11 @@ func NewPacketOutPkt(dst string) (OpenFlowPkt, error) {
 
 	actSetNW := v10.NewActionSetNWSrc()
 	actSetNW.SetNWSrc([]byte{0x1, 0x2, 0x3, 0x4})
+
+	actSetTP := v10.NewActionSetTPSrc()
+	actSetTP.SetPort(uint16(123))
 	//packetOut.AddAction(actOut)
-	packetOut.AddAction(actSetNW)
+	packetOut.AddAction(actSetTP)
 	//packetOut.SetData([]byte(time.Now().Format(time.UnixDate)))
 	data, err := packetOut.MarshalBinary()
 	if err != nil {

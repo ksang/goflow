@@ -56,6 +56,38 @@ type ActionSetNWDst interface {
 	SetNWDst(net.IP)
 }
 
+type ActionSetNWTos interface {
+	openflow.Action
+	NWTos() uint8
+	SetNWTos(uint8)
+}
+
+type ActionSetTPSrc interface {
+	openflow.Action
+	Port() uint16
+	SetPort(uint16) error
+}
+
+type ActionSetTPDst interface {
+	openflow.Action
+	Port() uint16
+	SetPort(uint16) error
+}
+
+type ActionEnqueue interface {
+	openflow.Action
+	Port() uint16
+	SetPort(uint16) error
+	QueueID() uint32
+	SetQueueID(uint32)
+}
+
+type ActionVendor interface {
+	openflow.Action
+	Vendor() uint32
+	SetVendor(uint32)
+}
+
 type actionHead struct {
 	actionType uint16
 	length uint16 		// the length of entire action block
@@ -416,6 +448,216 @@ func NewActionSetNWDst() ActionSetNWDst {
 	return &actionSetNW{
 		actionHead 	: actionHead {
 			actionType 	: OFPAT_SET_NW_DST,
+			length 		: 8,
+		},
+	}
+}
+
+// action SetVLANPCP definitions
+type actionSetNWTos struct {
+	actionHead
+	nwTos uint8
+}
+
+func (as *actionSetNWTos) NWTos() uint8 {
+	return as.nwTos
+}
+
+func (as *actionSetNWTos) SetNWTos(tos uint8) {
+	as.nwTos = tos
+}
+
+func (as *actionSetNWTos) MarshalBinary() ([]byte, error) {
+	v := make([]byte, 4)
+	v[0] = as.nwTos
+	// v[1:4] is padding
+	if err := as.SetPayload(v); err != nil {
+		return nil, err
+	}
+	return as.MarshalActionHead()
+}
+
+func (as *actionSetNWTos) UnmarshalBinary(data []byte) error {
+	if err := as.UnmarshalActionHead(data); err != nil {
+		return err
+	}
+	payload := as.Payload()
+	if len(payload) != 4 {
+		return openflow.ErrInvalidDataLength
+	}
+	as.nwTos = payload[0]
+	// payload[1:4] is padding
+	return nil
+}
+
+func NewActionSetNWTos() ActionSetNWTos {
+	return &actionSetNWTos{
+		actionHead 	: actionHead {
+			actionType 	: OFPAT_SET_NW_TOS,
+			length 		: 8,
+		},
+	}
+}
+
+// action SetTPSrc/Dst definitions
+type actionSetTP struct {
+	actionHead
+	port uint16
+}
+
+func (as *actionSetTP) Port() uint16 {
+	return as.port
+}
+
+func (as *actionSetTP) SetPort(port uint16) error {
+	if port > 0xffef {
+		return openflow.ErrInvalidValueProvided
+	}
+	as.port = port
+	return nil
+}
+
+func (as *actionSetTP) MarshalBinary() ([]byte, error) {
+	v := make([]byte, 4)
+	binary.BigEndian.PutUint16(v[0:2], as.port)
+	// v[2:4] is pad
+	if err := as.SetPayload(v); err != nil {
+		return nil, err
+	}
+	return as.MarshalActionHead()
+}
+
+func (as *actionSetTP) UnmarshalBinary(data []byte) error {
+	if err := as.UnmarshalActionHead(data); err != nil {
+		return err
+	}
+	payload := as.Payload()
+	if len(payload) != 4 {
+		return openflow.ErrInvalidDataLength
+	}
+	as.port = binary.BigEndian.Uint16(payload[0:2])
+	//payload[2:4] is pad
+	return nil
+}
+
+func NewActionSetTPSrc() ActionSetTPSrc {
+	return &actionSetTP{
+		actionHead 	: actionHead {
+			actionType 	: OFPAT_SET_TP_SRC,
+			length 		: 8,
+		},
+	}
+}
+
+func NewActionSetTPDst() ActionSetTPDst {
+	return &actionSetTP{
+		actionHead 	: actionHead {
+			actionType 	: OFPAT_SET_TP_DST,
+			length 		: 8,
+		},
+	}
+}
+
+// action Enqueue definitions
+type actionEnqueue struct {
+	actionHead
+	port uint16
+	queueID uint32
+}
+
+func (ae *actionEnqueue) Port() uint16 {
+	return ae.port
+}
+
+func (ae *actionEnqueue) SetPort(port uint16) error {
+	if port > 0xffef {
+		return openflow.ErrInvalidValueProvided
+	}
+	ae.port = port
+	return nil
+}
+
+func (ae *actionEnqueue) QueueID() uint32 {
+	return ae.queueID
+}
+
+func (ae *actionEnqueue) SetQueueID(qid uint32) {
+	ae.queueID = qid
+}
+
+func (ae *actionEnqueue) MarshalBinary() ([]byte, error) {
+	v := make([]byte, 12)
+	binary.BigEndian.PutUint16(v[0:2], ae.port)
+	// v[2:8] is pad
+	binary.BigEndian.PutUint32(v[8:12], ae.queueID)
+	if err := ae.SetPayload(v); err != nil {
+		return nil, err
+	}
+	return ae.MarshalActionHead()
+}
+
+func (ae *actionEnqueue) UnmarshalBinary(data []byte) error {
+	if err := ae.UnmarshalActionHead(data); err != nil {
+		return err
+	}
+	payload := ae.Payload()
+	if len(payload) != 12 {
+		return openflow.ErrInvalidDataLength
+	}
+	ae.port = binary.BigEndian.Uint16(payload[0:2])
+	//payload[2:8] is pad
+	ae.queueID = binary.BigEndian.Uint32(payload[8:12])
+	return nil
+}
+
+func NewActionEnqueue() ActionEnqueue {
+	return &actionEnqueue{
+		actionHead 	: actionHead {
+			actionType 	: OFPAT_ENQUEUE,
+			length 		: 16,
+		},
+	}
+}
+
+// action Vendor definitions
+type actionVendor struct {
+	actionHead
+	vendor uint32
+}
+
+func (av *actionVendor) Vendor() uint32 {
+	return av.vendor
+}
+
+func (av *actionVendor) SetVendor(vendor uint32) {
+	av.vendor = vendor
+}
+
+func (av *actionVendor) MarshalBinary() ([]byte, error) {
+	v := make([]byte, 4)
+	binary.BigEndian.PutUint32(v[0:4], av.vendor)
+	if err := av.SetPayload(v); err != nil {
+		return nil, err
+	}
+	return av.MarshalActionHead()
+}
+
+func (av *actionVendor) UnmarshalBinary(data []byte) error {
+	if err := av.UnmarshalActionHead(data); err != nil {
+		return err
+	}
+	payload := av.Payload()
+	if len(payload) != 4 {
+		return openflow.ErrInvalidDataLength
+	}
+	av.vendor = binary.BigEndian.Uint32(payload[0:4])
+	return nil
+}
+
+func NewActionVendor() ActionVendor {
+	return &actionVendor{
+		actionHead 	: actionHead {
+			actionType 	: OFPAT_VENDOR,
 			length 		: 8,
 		},
 	}
