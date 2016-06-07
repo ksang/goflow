@@ -28,6 +28,38 @@ func NewOpenFlowPkt(dst string,
 	}, nil
 }
 
+func CreateOFPkt(dst string, data []byte) OpenFlowPkt {
+	return OpenFlowPkt{
+		TCPPacket: TCPPacket{
+			dst:     dst,
+			payload: data,
+		},
+	}	
+}
+
+func NewHelloPkt(dst string) (OpenFlowPkt, error) {
+	hello := v10.NewHello(uint32(23333))
+	hello.SetData([]byte(time.Now().Format(time.UnixDate)))
+	data, err := hello.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data) , nil
+}
+
+func NewErrorPkt(dst string) (OpenFlowPkt, error) {
+	error := v10.NewError(uint32(23333))
+	error.SetType(uint16(1))
+	error.SetCode(uint16(2))
+	error.SetData([]byte(time.Now().Format(time.UnixDate)))
+	data, err := error.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data) , nil
+}
+
+
 func NewEchoRequestPkt(dst string) (OpenFlowPkt, error) {
 	echo := v10.NewEchoRequest(uint32(23333))
 	echo.SetData([]byte(time.Now().Format(time.UnixDate)))
@@ -35,12 +67,7 @@ func NewEchoRequestPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return OpenFlowPkt{
-		TCPPacket: TCPPacket{
-			dst:     dst,
-			payload: data,
-		},
-	}, nil
+	return CreateOFPkt(dst, data) , nil
 }
 
 func NewPacketInPkt(dst string) (OpenFlowPkt, error) {
@@ -53,12 +80,7 @@ func NewPacketInPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return OpenFlowPkt{
-		TCPPacket: TCPPacket{
-			dst:     dst,
-			payload: data,
-		},
-	}, nil
+	return CreateOFPkt(dst, data) , nil
 }
 
 func NewPacketOutPkt(dst string) (OpenFlowPkt, error) {
@@ -84,10 +106,46 @@ func NewPacketOutPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return OpenFlowPkt{
-		TCPPacket: TCPPacket{
-			dst:     dst,
-			payload: data,
-		},
-	}, nil
+	return CreateOFPkt(dst, data) , nil
+}
+
+func NewFeatureRequestPkt(dst string) (OpenFlowPkt, error) {
+	feature := v10.NewFeatureRequest(uint32(23334))
+	data, err := feature.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data) , nil
+}
+
+func NewFeatureReplyPkt(dst string) (OpenFlowPkt, error) {
+	feature := v10.NewFeatureReply(uint32(23334))
+	feature.SetDPID(uint64(111111))
+	feature.SetNumBuffers(uint32(8))
+	feature.SetNumTables(uint8(6))
+	feature.SetCapabilities(v10.CAP_FLOW_STATS|v10.CAP_TABLE_STATS)
+	feature.SetActions(v10.ACT_OUTPUT|v10.ACT_ENQUEUE)
+	p1, err := v10.NewPort(uint16(1), []byte{0x01,0x02,0x03,0x04,0x05,0x06}, "port no.1")
+	p2, err := v10.NewPort(uint16(2), []byte{0x11,0x22,0x33,0x44,0x55,0x66}, "port no.2")
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	feature.AddPort(p1)
+	feature.AddPort(p2)
+	data, err := feature.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data) , nil
+}
+
+func NewGetConfigReply(dst string) (OpenFlowPkt, error) {
+	config := v10.NewGetConfigReply(uint32(23334))
+	config.SetFlags(v10.OFPC_FRAG_NORMAL)
+	config.SetMissSendLength(0x10)
+	data, err := config.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data) , nil
 }

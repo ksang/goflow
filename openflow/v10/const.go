@@ -177,6 +177,7 @@ const (
 	OFPST_VENDOR = 0xffff
 )
 
+// Config Flags
 const (
 	OFPC_FRAG_NORMAL = iota /* No special handling for fragments. */
 	OFPC_FRAG_DROP          /* Drop fragments. */
@@ -188,4 +189,69 @@ const (
 	OFPPR_ADD    = 0
 	OFPPR_DELETE = 1
 	OFPPR_MODIFY = 2
+)
+
+// Features Capabilities
+const (
+	CAP_FLOW_STATS 		= 0x01 << iota
+	CAP_TABLE_STATS
+	CAP_PORT_STATS 
+	CAP_STP 
+	CAP_RESERVED
+	CAP_IP_REASM
+	CAP_QUEUE_STATS	
+	CAP_ARP_MATCH_IP
+)
+
+// Features Actions
+const (
+	ACT_OUTPUT			= 0x1 << iota
+	ACT_SET_VLAN_VID
+	ACT_SET_VLAN_PCP
+	ACT_STRIP_VLAN
+	ACT_SET_DL_SRC
+	ACT_SET_DL_DST	
+	ACT_SET_NW_SRC
+	ACT_SET_NW_DST
+	ACT_SET_NW_TOS
+	ACT_SET_TP_SRC
+	ACT_SET_TP_DST
+	ACT_ENQUEUE	
+)
+
+// Port Config
+const (
+	CONF_PortDown 		= 0x1 << iota
+	CONF_NoSTP
+	CONF_NoRecv
+	CONF_NoRecvSTP
+	CONF_NoFlood
+	CONF_NoFwd
+	CONF_NoPacketIn
+)
+
+// Port state
+const (
+	STATE_STPListen		= 0x0
+	STATE_LinkDown		= 0x1 << iota
+	STATE_STPLearn
+	STATE_STPForward
+	STATE_STPBlock
+	STATE_STPMask
+)
+
+// Port feature
+const (
+	FEAT_10MB_HD		= 0x1 << iota
+	FEAT_10MB_FD
+	FEAT_100MB_HD
+	FEAT_100MB_FD
+	FEAT_1GB_HD	
+	FEAT_1GB_FD
+	FEAT_10GB_FD
+	FEAT_Copper
+	FEAT_Fiber
+	FEAT_AutoNeg
+	FEAT_Pause
+	FEAT_PauseAsym
 )

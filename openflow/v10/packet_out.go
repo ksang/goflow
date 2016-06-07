@@ -122,6 +122,7 @@ func (p *packetOut) UnmarshalBinary(data []byte) error {
 	}
 	return nil
 }
+
 func NewPacketOut(xid uint32) openflow.PacketOut {
 	return &packetOut{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_PACKET_OUT, xid),

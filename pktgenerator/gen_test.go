@@ -12,7 +12,7 @@ func TestOpenFlow(t *testing.T) {
 		fmt.Print(err)
 		return
 	}
-	ofpkt, err := NewPacketOutPkt("127.0.0.1:6633")
+	ofpkt, err := NewGetConfigReply("127.0.0.1:6633")
 	if err != nil {
 		fmt.Print(err)
 		return 
