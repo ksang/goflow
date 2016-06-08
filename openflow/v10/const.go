@@ -1,5 +1,5 @@
 /*
-Package openflow/v10 impelements openflow version 1.0.0
+Package openflow/v10 implements openflow version 1.0.0
 */
 package v10
 

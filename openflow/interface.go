@@ -26,6 +26,7 @@ type ActionHead interface {
 	UnmarshalActionHead([]byte) error
 }
 
+// Port is a structure describes a port
 type Port interface {
 	PortID() uint16
 	SetPortID(uint16)
@@ -45,6 +46,61 @@ type Port interface {
 	SetSupported(uint32)
 	Peer() uint32
 	SetPeer(uint32)
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
+
+// Match is a structure used in flow related messages
+type Match interface {
+	Wildcards() uint32
+	// returns wildcard mask for Inport and inport number
+	InPort() (bool, uint16)
+	SetInPort(uint16)
+	SetWildcardInPort()
+
+	DLSrc() (bool, net.HardwareAddr)
+	SetDLSrc(net.HardwareAddr)
+	SetWildcardDLSrc()
+	DLDst() (bool, net.HardwareAddr)
+	SetDLDst(net.HardwareAddr)
+	SetWildcardDLDst()
+
+	DLVlan() (bool, uint16)
+	SetDLVlan(uint16) error
+	SetWildcardDLVlan()
+
+	DLPCP() (bool, uint8)
+	SetDLPCP(uint8)
+	SetWildcardDLVlanPCP()
+
+	DLType() (bool, uint16)
+	SetDLType(uint16) error
+	SetWildcardDLType()
+
+	NWTos() (bool, uint8)
+	SetNWTos(uint8)
+	SetWildcardNWTos()
+
+	NWProto() (bool, uint8)
+	SetNWProto(uint8) error
+	SetWildcardNWProto()
+	// The wildcard mask here is to wildcard src/dst ip address
+	// Set it to 32 is matching the full ip address
+	// Set it to 0  will mask all the ip addr, returns 0.0.0.0
+	NWSrc() net.IP
+	SetNWSrc(net.IP)
+	SetWildcardNWSrc(int)
+	NWDst() net.IP
+	SetNWDst(net.IP)
+	SetWildcardNWDst(int)
+	// Source and destination port
+	TPSrc() (bool, uint16)
+	SetTPSrc(uint16)
+	SetWildcardTPSrc()
+	TPDst() (bool, uint16)
+	SetTPDst(uint16)
+	SetWildcardTPDst()
+
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
 }

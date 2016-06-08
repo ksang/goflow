@@ -2,7 +2,7 @@ package pktgenerator
 
 import (
 	"encoding/hex"
-	"fmt"
+	"log"
 	"net"
 )
 
@@ -17,10 +17,10 @@ func handleConnection(conn net.Conn) {
 	buf := make([]byte, 1500)
 	len, err := conn.Read(buf)
 	if err != nil {
-		fmt.Print(err)
+		log.Print(err)
 		return
 	}
-	fmt.Print("Packet Received: \n", hex.Dump(buf[:len]), "\n")
+	log.Print("Packet Received: \n", hex.Dump(buf[:len]), "\n")
 }
 
 func NewTcpServer(laddr string) *TcpServer {
@@ -37,7 +37,7 @@ func (t *TcpServer) Loop(ln net.Listener, ready chan bool) {
 		for {
 			conn, err := ln.Accept()
 			if err != nil {
-				fmt.Println(err)
+				log.Println(err)
 				continue
 			}
 			t.conn <- conn
@@ -59,7 +59,7 @@ func (t *TcpServer) Start() error {
 	ready := make(chan bool)
 	ln, err := net.Listen("tcp", t.laddr)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
 	go t.Loop(ln, ready)

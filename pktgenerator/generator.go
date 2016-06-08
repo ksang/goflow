@@ -1,5 +1,5 @@
 /*
-Package pktgenerator implements a package generator to test message format.
+Package pktgenerator implements a package generator to test openflow message format.
 Using this tool we can test openflow packets.
 */
 package pktgenerator

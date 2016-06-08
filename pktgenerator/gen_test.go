@@ -1,7 +1,7 @@
 package pktgenerator
 
 import (
-	"fmt"
+	"log"
 	"time"
 	"testing"
 )
@@ -9,17 +9,17 @@ import (
 func TestOpenFlow(t *testing.T) {
 	server := NewTcpServer(":6633")
 	if err := server.Start(); err != nil {
-		fmt.Print(err)
+		t.Error(err)
 		return
 	}
 	ofpkt, err := NewGetConfigReply("127.0.0.1:6633")
 	if err != nil {
-		fmt.Print(err)
+		t.Error(err)
 		return 
 	}
-	fmt.Println("Sending OF packets.")
+	log.Println("Sending OF packets.")
 	if err = SendMany(1, &ofpkt); err != nil {
-		fmt.Print(err)
+		t.Error(err)
 	}
 	time.Sleep(time.Second)
 	server.Stop()

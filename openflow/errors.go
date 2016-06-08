@@ -10,6 +10,7 @@ var (
 	ErrUnsupportedMessage    = errors.New("unsupported message type")
 	ErrInvalidMACAddress     = errors.New("invalid MAC address")
 	ErrInvalidIPAddress      = errors.New("invalid IP address")
+	ErrInvalidVlanID		 = errors.New("invalid vlan id")
 	ErrUnsupportedIPProtocol = errors.New("unsupported IP protocol")
 	ErrUnsupportedEtherType  = errors.New("unsupported Ethernet type")
 	ErrMissingIPProtocol     = errors.New("missing IP protocol")
