@@ -229,3 +229,37 @@ type PacketOut interface {
 	encoding.BinaryUnmarshaler
 	encoding.BinaryMarshaler
 }
+
+type FlowRemoved interface {
+	MessageDecoder
+	Match() Match
+	SetMatch(Match)
+	Cookie() uint64
+	SetCookie(uint64)
+	Priority() uint16
+	SetPriority(uint16)
+	Reason() uint8
+	SetReason(uint8) error
+	DurationSec() uint32
+	SetDurationSec(uint32)
+	DurationNanoSec() uint32
+	SetDurationNanoSec(uint32)
+	IdleTimeout() uint16
+	SetIdleTimeout(uint16)
+	PacketCount() uint64
+	SetPacketCount(uint64)
+	ByteCount() uint64
+	SetByteCount(uint64)
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
+
+type PortStatus interface {
+	MessageDecoder
+	Reason() PortReason
+	SetReason(PortReason)
+	Port() Port
+	SetPort(Port)
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}

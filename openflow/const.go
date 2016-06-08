@@ -12,3 +12,11 @@ const (
 const (
 	OF_HEADER_SIZE = 8
 )
+
+type PortReason uint8
+
+const (
+	PortAdded PortReason = iota
+	PortDeleted
+	PortModified
+)

@@ -139,11 +139,43 @@ func NewFeatureReplyPkt(dst string) (OpenFlowPkt, error) {
 	return CreateOFPkt(dst, data) , nil
 }
 
-func NewGetConfigReply(dst string) (OpenFlowPkt, error) {
+func NewGetConfigReplyPkt(dst string) (OpenFlowPkt, error) {
 	config := v10.NewGetConfigReply(uint32(23334))
 	config.SetFlags(v10.OFPC_FRAG_NORMAL)
 	config.SetMissSendLength(0x10)
 	data, err := config.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data) , nil
+}
+
+func NewFlowRemovedPkt(dst string) (OpenFlowPkt, error) {
+	fr := v10.NewFlowRemoved(uint32(23334))
+	m := v10.NewMatch()
+	m.SetInPort(uint16(1))
+	m.SetDLSrc([]byte{0x1,0x1,0x1,0x1,0x1,0x1})
+	m.SetDLDst([]byte{0x2,0x2,0x2,0x2,0x2,0x2})
+	m.SetNWSrc([]byte{0x1,0x1,0x1,0x1})
+	m.SetNWDst([]byte{0x2,0x2,0x2,0x2})
+	m.SetDLVlan(uint16(4096))
+	m.SetWildcardNWSrc(24)
+	fr.SetMatch(m)
+	fr.SetCookie(uint64(111))
+	fr.SetPacketCount(uint64(65535))
+	data, err := fr.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data) , nil
+}
+
+func NewPortStatusPkt(dst string) (OpenFlowPkt, error) {
+	ps := v10.NewPortStatus(uint32(23334))
+	p1, err := v10.NewPort(uint16(1), []byte{0x01,0x02,0x03,0x04,0x05,0x06}, "port no.1")
+	ps.SetPort(p1)
+	ps.SetReason(openflow.PortModified)
+	data, err := ps.MarshalBinary()
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
