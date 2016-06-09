@@ -1,2 +1,2 @@
 # goflow
-Go implementation of openflow
+Go implementation of openflow protocol and toolsets.

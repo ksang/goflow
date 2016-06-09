@@ -1,6 +1,6 @@
 package v10
 
-import(
+import (
 	"github.com/ksang/goflow/openflow"
 )
 

@@ -6,40 +6,40 @@ package v10
 // Openflow message types
 const (
 	/* Immutable messages. */
-	OFPT_HELLO = iota		/* Symmetric message */
-	OFPT_ERROR				/* Symmetric message */
-	OFPT_ECHO_REQUEST		/* Symmetric message */
-	OFPT_ECHO_REPLY			/* Symmetric message */
-	OFPT_VENDOR 			/* Symmetric message */
+	OFPT_HELLO        = iota /* Symmetric message */
+	OFPT_ERROR               /* Symmetric message */
+	OFPT_ECHO_REQUEST        /* Symmetric message */
+	OFPT_ECHO_REPLY          /* Symmetric message */
+	OFPT_VENDOR              /* Symmetric message */
 
 	/* Switch configuration messages. */
-	OFPT_FEATURES_REQUEST	/* Controller/switch message */
-	OFPT_FEATURES_REPLY		/* Controller/switch message */
+	OFPT_FEATURES_REQUEST   /* Controller/switch message */
+	OFPT_FEATURES_REPLY     /* Controller/switch message */
 	OFPT_GET_CONFIG_REQUEST /* Controller/switch message */
-	OFPT_GET_CONFIG_REPLY 	/* Controller/switch message */
-	OFPT_SET_CONFIG 		/* Controller/switch message */
+	OFPT_GET_CONFIG_REPLY   /* Controller/switch message */
+	OFPT_SET_CONFIG         /* Controller/switch message */
 
 	/* Asynchronous messages. */
-	OFPT_PACKET_IN 			/* Async message */
-	OFPT_FLOW_REMOVED       /* Async message */
-	OFPT_PORT_STATUS 		/* Async message */
+	OFPT_PACKET_IN    /* Async message */
+	OFPT_FLOW_REMOVED /* Async message */
+	OFPT_PORT_STATUS  /* Async message */
 
 	/* Controller command messages. */
-	OFPT_PACKET_OUT  		/* Controller/switch message */
-	OFPT_FLOW_MOD 			/* Controller/switch message */
-	OFPT_PORT_MOD  			/* Controller/switch message */
+	OFPT_PACKET_OUT /* Controller/switch message */
+	OFPT_FLOW_MOD   /* Controller/switch message */
+	OFPT_PORT_MOD   /* Controller/switch message */
 
 	/* Statistics messages. */
-	OFPT_STATS_REQUEST 		/* Controller/switch message */
-	OFPT_STATS_REPLY        /* Controller/switch message */
+	OFPT_STATS_REQUEST /* Controller/switch message */
+	OFPT_STATS_REPLY   /* Controller/switch message */
 
 	/* Barrier messages. */
-	OFPT_BARRIER_REQUEST 	/* Controller/switch message */
-	OFPT_BARRIER_REPLY 		/* Controller/switch message */
+	OFPT_BARRIER_REQUEST /* Controller/switch message */
+	OFPT_BARRIER_REPLY   /* Controller/switch message */
 
 	/* Queue Configuration messages. */
-	OFPT_QUEUE_GET_CONFIG_REQUEST 	/* Controller/switch message */
-	OFPT_QUEUE_GET_CONFIG_REPLY   	/* Controller/switch message */
+	OFPT_QUEUE_GET_CONFIG_REQUEST /* Controller/switch message */
+	OFPT_QUEUE_GET_CONFIG_REPLY   /* Controller/switch message */
 )
 
 // Openflow action types
@@ -62,22 +62,22 @@ const (
 // Openflow port settings
 const (
 	/* Maximum number of physical switch ports. */
-	OFPP_MAX        = 0xff00	
-	
-    /* Fake output "ports". */
-	OFPP_IN_PORT    = 0xfff8	/* Send the packet out the input port.  This
-                                   virtual port must be explicitly used
-                                   in order to send back out of the input
-                                   port. */
-	OFPP_TABLE      = 0xfff9	/* Perform actions in flow table.
-								   NB: This can only be the destination
-								   port for packet-out messages. */
-	OFPP_FLOOD      = 0xfffb	/* Process with normal L2/L3 switching. */
-	OFPP_ALL        = 0xfffc	/* All physical ports except input port and
-              					   those disabled by STP. */
-	OFPP_CONTROLLER = 0xfffd    /* Send to controller. */
-	OFPP_LOCAL		= 0xfffe	/* Local openflow "port". */
-	OFPP_NONE       = 0xffff 	/* Not associated with a physical port. */
+	OFPP_MAX = 0xff00
+
+	/* Fake output "ports". */
+	OFPP_IN_PORT = 0xfff8 /* Send the packet out the input port.  This
+	   virtual port must be explicitly used
+	   in order to send back out of the input
+	   port. */
+	OFPP_TABLE = 0xfff9 /* Perform actions in flow table.
+	   NB: This can only be the destination
+	   port for packet-out messages. */
+	OFPP_FLOOD = 0xfffb /* Process with normal L2/L3 switching. */
+	OFPP_ALL   = 0xfffc /* All physical ports except input port and
+	   those disabled by STP. */
+	OFPP_CONTROLLER = 0xfffd /* Send to controller. */
+	OFPP_LOCAL      = 0xfffe /* Local openflow "port". */
+	OFPP_NONE       = 0xffff /* Not associated with a physical port. */
 )
 
 const (
@@ -193,35 +193,35 @@ const (
 
 // Features Capabilities
 const (
-	CAP_FLOW_STATS 		= 0x01 << iota
+	CAP_FLOW_STATS = 0x01 << iota
 	CAP_TABLE_STATS
-	CAP_PORT_STATS 
-	CAP_STP 
+	CAP_PORT_STATS
+	CAP_STP
 	CAP_RESERVED
 	CAP_IP_REASM
-	CAP_QUEUE_STATS	
+	CAP_QUEUE_STATS
 	CAP_ARP_MATCH_IP
 )
 
 // Features Actions
 const (
-	ACT_OUTPUT			= 0x1 << iota
+	ACT_OUTPUT = 0x1 << iota
 	ACT_SET_VLAN_VID
 	ACT_SET_VLAN_PCP
 	ACT_STRIP_VLAN
 	ACT_SET_DL_SRC
-	ACT_SET_DL_DST	
+	ACT_SET_DL_DST
 	ACT_SET_NW_SRC
 	ACT_SET_NW_DST
 	ACT_SET_NW_TOS
 	ACT_SET_TP_SRC
 	ACT_SET_TP_DST
-	ACT_ENQUEUE	
+	ACT_ENQUEUE
 )
 
 // Port Config
 const (
-	CONF_PortDown 		= 0x1 << iota
+	CONF_PortDown = 0x1 << iota
 	CONF_NoSTP
 	CONF_NoRecv
 	CONF_NoRecvSTP
@@ -232,8 +232,8 @@ const (
 
 // Port state
 const (
-	STATE_STPListen		= 0x0
-	STATE_LinkDown		= 0x1 << iota
+	STATE_STPListen = 0x0
+	STATE_LinkDown  = 0x1 << iota
 	STATE_STPLearn
 	STATE_STPForward
 	STATE_STPBlock
@@ -242,11 +242,11 @@ const (
 
 // Port feature
 const (
-	FEAT_10MB_HD		= 0x1 << iota
+	FEAT_10MB_HD = 0x1 << iota
 	FEAT_10MB_FD
 	FEAT_100MB_HD
 	FEAT_100MB_FD
-	FEAT_1GB_HD	
+	FEAT_1GB_HD
 	FEAT_1GB_FD
 	FEAT_10GB_FD
 	FEAT_Copper

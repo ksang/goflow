@@ -1,6 +1,6 @@
 package v10
 
-import(
+import (
 	"encoding/binary"
 	"github.com/ksang/goflow/openflow"
 )
@@ -25,12 +25,12 @@ func NewFeatureRequest(xid uint32) openflow.FeatureRequest {
 
 type featureReply struct {
 	openflow.Message
-	dpid uint64
-	numBuffers uint32
-	numTables uint8
+	dpid         uint64
+	numBuffers   uint32
+	numTables    uint8
 	capabilities uint32
-	actions uint32
-	ports []openflow.Port
+	actions      uint32
+	ports        []openflow.Port
 }
 
 func (f *featureReply) DPID() uint64 {
@@ -39,7 +39,7 @@ func (f *featureReply) DPID() uint64 {
 
 func (f *featureReply) SetDPID(dpid uint64) {
 	f.dpid = dpid
-} 
+}
 
 func (f *featureReply) NumBuffers() uint32 {
 	return f.numBuffers
@@ -111,7 +111,7 @@ func (f *featureReply) UnmarshalBinary(data []byte) error {
 		return err
 	}
 	payload := f.Payload()
-	if payload == nil || len(payload) < 24 || (len(payload)-24) % 48 != 0{
+	if payload == nil || len(payload) < 24 || (len(payload)-24)%48 != 0 {
 		return openflow.ErrInvalidPacketLength
 	}
 	f.dpid = binary.BigEndian.Uint64(payload[0:8])
@@ -120,12 +120,12 @@ func (f *featureReply) UnmarshalBinary(data []byte) error {
 	// payload[13:16] is padding
 	f.capabilities = binary.BigEndian.Uint32(payload[16:20])
 	f.actions = binary.BigEndian.Uint32(payload[20:24])
-	for pos := 24; pos < len(payload); pos += 48{
+	for pos := 24; pos < len(payload); pos += 48 {
 		port := NewEmptyPort()
-		if err := port.UnmarshalBinary(payload[pos:pos+48]); err != nil {
+		if err := port.UnmarshalBinary(payload[pos : pos+48]); err != nil {
 			return err
 		}
-	} 
+	}
 	return nil
 }
 

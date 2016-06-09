@@ -1,8 +1,8 @@
 package openflow
 
 import (
-	"net"
 	"encoding"
+	"net"
 )
 
 // general action interface
@@ -14,16 +14,6 @@ type Action interface {
 	SetPayload([]byte) error
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
-}
-
-type ActionHead interface {
-	Type() uint16
-	SetType(uint16)
-	Length() uint16
-	Payload() []byte
-	SetPayload([]byte) error
-	MarshalActionHead() ([]byte, error)
-	UnmarshalActionHead([]byte) error
 }
 
 // Port is a structure describes a port
@@ -104,6 +94,7 @@ type Match interface {
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
 }
+
 // Hello message interface
 // Share the same interface and struct as echo
 type Hello interface {
@@ -260,6 +251,32 @@ type PortStatus interface {
 	SetReason(PortReason)
 	Port() Port
 	SetPort(Port)
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
+
+type FlowMod interface {
+	MessageDecoder
+	Match() Match
+	SetMatch(Match)
+	Cookie() uint64
+	SetCookie(uint64) error
+	Command() FlowCommand
+	SetCommand(FlowCommand)
+	IdleTimeout() uint16
+	SetIdleTimeout(uint16)
+	HardTimeout() uint16
+	SetHardTimeout(uint16)
+	Priority() uint16
+	SetPriority(uint16)
+	BufferID() uint32
+	SetBufferID(uint32)
+	OutPort() uint16
+	SetOutPort(uint16)
+	Flags() FlowFlag
+	SetFlags(FlowFlag)
+	Action() Action
+	SetAction(Action)
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
 }

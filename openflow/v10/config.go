@@ -1,6 +1,6 @@
 package v10
 
-import(
+import (
 	"encoding/binary"
 	"github.com/ksang/goflow/openflow"
 )
@@ -50,7 +50,7 @@ func (s *setConfig) UnmarshalBinary(data []byte) error {
 	}
 	s.flags = binary.BigEndian.Uint16(payload[0:2])
 	s.missSendLength = binary.BigEndian.Uint16(payload[2:4])
-	return nil	
+	return nil
 }
 
 func NewSetConfig(xid uint32) openflow.SetConfig {
@@ -80,8 +80,6 @@ type getConfigReply struct {
 func NewGetConfigReply(xid uint32) openflow.GetConfigReply {
 	return &setConfig{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_GET_CONFIG_REPLY, xid),
-		config: config{},
+		config:  config{},
 	}
 }
-
-

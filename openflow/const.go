@@ -20,3 +20,21 @@ const (
 	PortDeleted
 	PortModified
 )
+
+type FlowCommand uint16
+
+const (
+	Add FlowCommand = iota
+	Modify
+	ModifyStrict
+	Delete
+	DeleteStrict
+)
+
+type FlowFlag uint16
+
+const (
+	SendFlowRem FlowFlag = iota + 0x01
+	CheckOverlap
+	Emerg
+)

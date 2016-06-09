@@ -1,21 +1,21 @@
 package v10
 
-import(
-	"net"
+import (
 	"encoding/binary"
 	"github.com/ksang/goflow/openflow"
+	"net"
 )
 
 type port struct {
-	portID uint16
-	hwAddr net.HardwareAddr
-	name string
-	config uint32
-	state uint32
-	curr uint32
+	portID     uint16
+	hwAddr     net.HardwareAddr
+	name       string
+	config     uint32
+	state      uint32
+	curr       uint32
 	advertised uint32
-	supported uint32
-	peer uint32
+	supported  uint32
+	peer       uint32
 }
 
 func (p *port) PortID() uint16 {
@@ -105,7 +105,7 @@ func (p *port) MarshalBinary() ([]byte, error) {
 	copy(v[8:24], []byte(p.name))
 	binary.BigEndian.PutUint32(v[24:28], p.config)
 	binary.BigEndian.PutUint32(v[28:32], p.state)
-	binary.BigEndian.PutUint32(v[32:36], p.curr)	
+	binary.BigEndian.PutUint32(v[32:36], p.curr)
 	binary.BigEndian.PutUint32(v[36:40], p.advertised)
 	binary.BigEndian.PutUint32(v[40:44], p.supported)
 	binary.BigEndian.PutUint32(v[44:48], p.peer)
@@ -140,6 +140,6 @@ func NewPort(pid uint16, hwAddr net.HardwareAddr, name string) (openflow.Port, e
 	return p, nil
 }
 
-func NewEmptyPort() openflow.Port{
+func NewEmptyPort() openflow.Port {
 	return &port{}
 }

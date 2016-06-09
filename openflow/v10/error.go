@@ -1,13 +1,13 @@
 package v10
 
-import(
+import (
 	"encoding/binary"
 	"github.com/ksang/goflow/openflow"
 )
 
 type errorMessage struct {
 	openflow.Message
-	typ uint16
+	typ  uint16
 	code uint16
 	data []byte
 }
@@ -51,10 +51,10 @@ func (e *errorMessage) SetData(data []byte) error {
 }
 
 func (e *errorMessage) MarshalBinary() ([]byte, error) {
-	v := make([]byte, 4 + len(e.data))
+	v := make([]byte, 4+len(e.data))
 	binary.BigEndian.PutUint16(v[0:2], e.typ)
 	binary.BigEndian.PutUint16(v[2:4], e.code)
-	if len(e.data) > 0{
+	if len(e.data) > 0 {
 		copy(v[4:], e.data)
 	}
 	e.SetPayload(v)

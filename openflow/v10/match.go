@@ -2,27 +2,27 @@ package v10
 
 import (
 	"encoding/binary"
-	"net"
 	"github.com/ksang/goflow/openflow"
+	"net"
 )
 
 type wildcard struct {
-	inPort    bool /* Switch input port. */
-	dlVlan    bool /* VLAN id. */
-	dlSrc     bool /* Ethernet source address. */
-	dlDst     bool /* Ethernet destination address. */
-	dlType    bool /* Ethernet frame type. */
-	nwProto   bool /* IP protocol. */
-	tpSrc     bool /* TCP/UDP source port. */
-	tpDst     bool /* TCP/UDP destination port. */
+	inPort  bool /* Switch input port. */
+	dlVlan  bool /* VLAN id. */
+	dlSrc   bool /* Ethernet source address. */
+	dlDst   bool /* Ethernet destination address. */
+	dlType  bool /* Ethernet frame type. */
+	nwProto bool /* IP protocol. */
+	tpSrc   bool /* TCP/UDP source port. */
+	tpDst   bool /* TCP/UDP destination port. */
 	// IP wildcards are inversed VLSM numbers, it needs to be converted
 	// e.g 0  is 255.255.255.255
 	//	   32 is 0.0.0.0
-	nwSrc        uint8
-	nwDst        uint8
-	dlVlanPCP    bool /* VLAN priority. */
-	nwTos        bool
-	all 		 bool
+	nwSrc     uint8
+	nwDst     uint8
+	dlVlanPCP bool /* VLAN priority. */
+	nwTos     bool
+	all       bool
 }
 
 func (w *wildcard) MarshalBinary() ([]byte, error) {
@@ -117,35 +117,35 @@ func (w *wildcard) UnmarshalBinary(data []byte) error {
 }
 
 type match struct {
-	wildcards 	wildcard
-	inPort 		uint16
-	dlSrc     	net.HardwareAddr
-	dlDst     	net.HardwareAddr
-	dlVlan     	uint16
-	dlPCP 		uint8
-	dlType   	uint16
-	nwTos 		uint8
-	nwProto   	uint8
-	nwSrc     	net.IP
-	nwDst    	net.IP
-	tpSrc    	uint16
-	tpDst   	uint16
+	wildcards wildcard
+	inPort    uint16
+	dlSrc     net.HardwareAddr
+	dlDst     net.HardwareAddr
+	dlVlan    uint16
+	dlPCP     uint8
+	dlType    uint16
+	nwTos     uint8
+	nwProto   uint8
+	nwSrc     net.IP
+	nwDst     net.IP
+	tpSrc     uint16
+	tpDst     uint16
 }
 
 // NewMatch returns a Match whose fields are all wildcarded
 func NewMatch() openflow.Match {
 	return &match{
 		wildcards: wildcard{
-					 all: true,
-					 },
-		dlSrc:		net.HardwareAddr([]byte{0, 0, 0, 0, 0, 0}),
-		dlDst:		net.HardwareAddr([]byte{0, 0, 0, 0, 0, 0}),
-		nwSrc:		net.IPv4zero,
-		nwDst:		net.IPv4zero,
+			all: true,
+		},
+		dlSrc: net.HardwareAddr([]byte{0, 0, 0, 0, 0, 0}),
+		dlDst: net.HardwareAddr([]byte{0, 0, 0, 0, 0, 0}),
+		nwSrc: net.IPv4zero,
+		nwDst: net.IPv4zero,
 	}
 }
 
-func (m *match)	Wildcards() uint32 {
+func (m *match) Wildcards() uint32 {
 	v, err := m.wildcards.MarshalBinary()
 	if err != nil {
 		// Not possible to happen
@@ -157,46 +157,46 @@ func (m *match)	Wildcards() uint32 {
 func (m *match) InPort() (bool, uint16) {
 	return m.wildcards.inPort, m.inPort
 }
-	
-func (m* match) SetInPort(ip uint16) {
+
+func (m *match) SetInPort(ip uint16) {
 	m.inPort = ip
 	m.wildcards.inPort = false
 }
 
-func (m *match)	SetWildcardInPort() {
+func (m *match) SetWildcardInPort() {
 	m.wildcards.inPort = true
 }
 
-func (m *match)	DLSrc() (bool, net.HardwareAddr) {
+func (m *match) DLSrc() (bool, net.HardwareAddr) {
 	return m.wildcards.dlSrc, m.dlSrc
 }
 
-func (m *match)	SetDLSrc(mac net.HardwareAddr) {
+func (m *match) SetDLSrc(mac net.HardwareAddr) {
 	m.dlSrc = mac
 	m.wildcards.dlSrc = false
 }
 
-func (m *match)	SetWildcardDLSrc() {
+func (m *match) SetWildcardDLSrc() {
 	m.wildcards.dlSrc = true
 }
 
-func (m *match)	DLDst() (bool, net.HardwareAddr) {
+func (m *match) DLDst() (bool, net.HardwareAddr) {
 	return m.wildcards.dlDst, m.dlDst
 }
 
-func (m *match)	SetDLDst(mac net.HardwareAddr) {
+func (m *match) SetDLDst(mac net.HardwareAddr) {
 	m.dlDst = mac
 	m.wildcards.dlDst = false
 }
-func (m *match)	SetWildcardDLDst() {
+func (m *match) SetWildcardDLDst() {
 	m.wildcards.dlDst = true
 }
 
-func (m *match)	DLVlan() (bool, uint16) {
+func (m *match) DLVlan() (bool, uint16) {
 	return m.wildcards.dlVlan, m.dlVlan
 }
 
-func (m *match)	SetDLVlan(vlan uint16) error {
+func (m *match) SetDLVlan(vlan uint16) error {
 	if int(vlan) > 4096 {
 		return openflow.ErrInvalidVlanID
 	}
@@ -205,28 +205,28 @@ func (m *match)	SetDLVlan(vlan uint16) error {
 	return nil
 }
 
-func (m *match)	SetWildcardDLVlan() {
+func (m *match) SetWildcardDLVlan() {
 	m.wildcards.dlVlan = true
 }
 
-func (m *match)	DLPCP() (bool, uint8) {
+func (m *match) DLPCP() (bool, uint8) {
 	return m.wildcards.dlVlanPCP, m.dlPCP
 }
 
-func (m *match)	SetDLPCP(pcp uint8) {
+func (m *match) SetDLPCP(pcp uint8) {
 	m.dlPCP = pcp
 	m.wildcards.dlVlanPCP = false
 }
 
-func (m *match)	SetWildcardDLVlanPCP(){
+func (m *match) SetWildcardDLVlanPCP() {
 	m.wildcards.dlVlanPCP = true
 }
 
-func (m *match)	DLType() (bool, uint16) {
+func (m *match) DLType() (bool, uint16) {
 	return m.wildcards.dlType, m.dlType
 }
 
-func (m *match)	SetDLType(dlt uint16) error {
+func (m *match) SetDLType(dlt uint16) error {
 	if dlt != 0x0800 {
 		return openflow.ErrUnsupportedEtherType
 	}
@@ -234,29 +234,29 @@ func (m *match)	SetDLType(dlt uint16) error {
 	m.wildcards.dlType = false
 	return nil
 }
-	
-func (m *match)	SetWildcardDLType() {
+
+func (m *match) SetWildcardDLType() {
 	m.wildcards.dlType = true
 }
 
-func (m *match)	NWTos() (bool, uint8) {
+func (m *match) NWTos() (bool, uint8) {
 	return m.wildcards.nwTos, m.nwTos
 }
 
-func (m *match)	SetNWTos(tos uint8) {
+func (m *match) SetNWTos(tos uint8) {
 	m.nwTos = tos
 	m.wildcards.nwTos = false
 }
 
-func (m *match)	SetWildcardNWTos() {
+func (m *match) SetWildcardNWTos() {
 	m.wildcards.nwTos = true
 }
 
-func (m *match)	NWProto() (bool, uint8) {
+func (m *match) NWProto() (bool, uint8) {
 	return m.wildcards.nwProto, m.nwProto
 }
 
-func (m *match)	SetNWProto(proto uint8) error {
+func (m *match) SetNWProto(proto uint8) error {
 	if proto != 0x06 && proto != 0x11 {
 		return openflow.ErrUnsupportedIPProtocol
 	}
@@ -264,13 +264,13 @@ func (m *match)	SetNWProto(proto uint8) error {
 	m.wildcards.nwProto = false
 	return nil
 }
-	
-func (m *match)	SetWildcardNWProto() {
+
+func (m *match) SetWildcardNWProto() {
 	m.wildcards.nwProto = true
 }
 
-func (m *match)	NWSrc() net.IP {
-	mask := net.CIDRMask(32 - int(m.wildcards.nwSrc), 32)
+func (m *match) NWSrc() net.IP {
+	mask := net.CIDRMask(32-int(m.wildcards.nwSrc), 32)
 	return m.nwSrc.Mask(mask)
 }
 
@@ -279,7 +279,7 @@ func (m *match) SetNWSrc(ip net.IP) {
 }
 
 func (m *match) SetWildcardNWSrc(vlsm int) {
-	if vlsm < 0{
+	if vlsm < 0 {
 		vlsm = 0
 	}
 	if vlsm > 32 {
@@ -290,7 +290,7 @@ func (m *match) SetWildcardNWSrc(vlsm int) {
 }
 
 func (m *match) NWDst() net.IP {
-	mask := net.CIDRMask(32 - int(m.wildcards.nwDst), 32)
+	mask := net.CIDRMask(32-int(m.wildcards.nwDst), 32)
 	return m.nwDst.Mask(mask)
 }
 
@@ -298,7 +298,7 @@ func (m *match) SetNWDst(ip net.IP) {
 	m.nwDst = ip
 }
 func (m *match) SetWildcardNWDst(vlsm int) {
-	if vlsm < 0{
+	if vlsm < 0 {
 		vlsm = 0
 	}
 	if vlsm > 32 {
@@ -307,7 +307,8 @@ func (m *match) SetWildcardNWDst(vlsm int) {
 	// convert it from vlsm to our mask format
 	m.wildcards.nwDst = 0x20 - uint8(vlsm)
 }
-	// Source and destination port
+
+// Source and destination port
 func (m *match) TPSrc() (bool, uint16) {
 	return m.wildcards.tpSrc, m.tpSrc
 }

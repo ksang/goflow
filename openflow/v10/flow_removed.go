@@ -1,21 +1,21 @@
 package v10
 
-import(
+import (
 	"encoding/binary"
 	"github.com/ksang/goflow/openflow"
 )
 
 type flowRemoved struct {
 	openflow.Message
-	match 			openflow.Match
-	cookie   		uint64
-	priority   		uint16
-	reason   		uint8
+	match           openflow.Match
+	cookie          uint64
+	priority        uint16
+	reason          uint8
 	durationSec     uint32
 	durationNanoSec uint32
-	idleTimeout		uint16
-	packetCount 	uint64
-	byteCount 		uint64
+	idleTimeout     uint16
+	packetCount     uint64
+	byteCount       uint64
 }
 
 func (f *flowRemoved) Match() openflow.Match {
@@ -92,7 +92,6 @@ func (f *flowRemoved) ByteCount() uint64 {
 func (f *flowRemoved) SetByteCount(bc uint64) {
 	f.byteCount = bc
 }
-
 
 func (f *flowRemoved) MarshalBinary() ([]byte, error) {
 	v := make([]byte, 80)

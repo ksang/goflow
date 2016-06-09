@@ -34,7 +34,7 @@ func CreateOFPkt(dst string, data []byte) OpenFlowPkt {
 			dst:     dst,
 			payload: data,
 		},
-	}	
+	}
 }
 
 func NewHelloPkt(dst string) (OpenFlowPkt, error) {
@@ -44,7 +44,7 @@ func NewHelloPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
 
 func NewErrorPkt(dst string) (OpenFlowPkt, error) {
@@ -56,9 +56,8 @@ func NewErrorPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
-
 
 func NewEchoRequestPkt(dst string) (OpenFlowPkt, error) {
 	echo := v10.NewEchoRequest(uint32(23333))
@@ -67,7 +66,7 @@ func NewEchoRequestPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
 
 func NewPacketInPkt(dst string) (OpenFlowPkt, error) {
@@ -80,7 +79,7 @@ func NewPacketInPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
 
 func NewPacketOutPkt(dst string) (OpenFlowPkt, error) {
@@ -92,7 +91,7 @@ func NewPacketOutPkt(dst string) (OpenFlowPkt, error) {
 	actOut.SetMaxLen(uint16(65535))
 
 	actSetDL := v10.NewActionSetDLSrc()
-	actSetDL.SetDLSrc([]byte{0xa8,0x66,0x7f,0x33,0x44,0x55})
+	actSetDL.SetDLSrc([]byte{0xa8, 0x66, 0x7f, 0x33, 0x44, 0x55})
 
 	actSetNW := v10.NewActionSetNWSrc()
 	actSetNW.SetNWSrc([]byte{0x1, 0x2, 0x3, 0x4})
@@ -106,7 +105,7 @@ func NewPacketOutPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
 
 func NewFeatureRequestPkt(dst string) (OpenFlowPkt, error) {
@@ -115,7 +114,7 @@ func NewFeatureRequestPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
 
 func NewFeatureReplyPkt(dst string) (OpenFlowPkt, error) {
@@ -123,10 +122,10 @@ func NewFeatureReplyPkt(dst string) (OpenFlowPkt, error) {
 	feature.SetDPID(uint64(111111))
 	feature.SetNumBuffers(uint32(8))
 	feature.SetNumTables(uint8(6))
-	feature.SetCapabilities(v10.CAP_FLOW_STATS|v10.CAP_TABLE_STATS)
-	feature.SetActions(v10.ACT_OUTPUT|v10.ACT_ENQUEUE)
-	p1, err := v10.NewPort(uint16(1), []byte{0x01,0x02,0x03,0x04,0x05,0x06}, "port no.1")
-	p2, err := v10.NewPort(uint16(2), []byte{0x11,0x22,0x33,0x44,0x55,0x66}, "port no.2")
+	feature.SetCapabilities(v10.CAP_FLOW_STATS | v10.CAP_TABLE_STATS)
+	feature.SetActions(v10.ACT_OUTPUT | v10.ACT_ENQUEUE)
+	p1, err := v10.NewPort(uint16(1), []byte{0x01, 0x02, 0x03, 0x04, 0x05, 0x06}, "port no.1")
+	p2, err := v10.NewPort(uint16(2), []byte{0x11, 0x22, 0x33, 0x44, 0x55, 0x66}, "port no.2")
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
@@ -136,7 +135,7 @@ func NewFeatureReplyPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
 
 func NewGetConfigReplyPkt(dst string) (OpenFlowPkt, error) {
@@ -147,17 +146,17 @@ func NewGetConfigReplyPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
 
 func NewFlowRemovedPkt(dst string) (OpenFlowPkt, error) {
 	fr := v10.NewFlowRemoved(uint32(23334))
 	m := v10.NewMatch()
 	m.SetInPort(uint16(1))
-	m.SetDLSrc([]byte{0x1,0x1,0x1,0x1,0x1,0x1})
-	m.SetDLDst([]byte{0x2,0x2,0x2,0x2,0x2,0x2})
-	m.SetNWSrc([]byte{0x1,0x1,0x1,0x1})
-	m.SetNWDst([]byte{0x2,0x2,0x2,0x2})
+	m.SetDLSrc([]byte{0x1, 0x1, 0x1, 0x1, 0x1, 0x1})
+	m.SetDLDst([]byte{0x2, 0x2, 0x2, 0x2, 0x2, 0x2})
+	m.SetNWSrc([]byte{0x1, 0x1, 0x1, 0x1})
+	m.SetNWDst([]byte{0x2, 0x2, 0x2, 0x2})
 	m.SetDLVlan(uint16(4096))
 	m.SetWildcardNWSrc(24)
 	fr.SetMatch(m)
@@ -167,17 +166,42 @@ func NewFlowRemovedPkt(dst string) (OpenFlowPkt, error) {
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
 }
 
 func NewPortStatusPkt(dst string) (OpenFlowPkt, error) {
 	ps := v10.NewPortStatus(uint32(23334))
-	p1, err := v10.NewPort(uint16(1), []byte{0x01,0x02,0x03,0x04,0x05,0x06}, "port no.1")
+	p1, err := v10.NewPort(uint16(1), []byte{0x01, 0x02, 0x03, 0x04, 0x05, 0x06}, "port no.1")
 	ps.SetPort(p1)
 	ps.SetReason(openflow.PortModified)
 	data, err := ps.MarshalBinary()
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
-	return CreateOFPkt(dst, data) , nil
+	return CreateOFPkt(dst, data), nil
+}
+
+func NewFlowModPkt(dst string) (OpenFlowPkt, error) {
+	fm := v10.NewFlowMod(uint32(23334))
+	m := v10.NewMatch()
+	m.SetInPort(uint16(1))
+	m.SetDLSrc([]byte{0x1, 0x1, 0x1, 0x1, 0x1, 0x1})
+	m.SetDLDst([]byte{0x2, 0x2, 0x2, 0x2, 0x2, 0x2})
+	m.SetNWSrc([]byte{0x1, 0x1, 0x1, 0x1})
+	m.SetNWDst([]byte{0x2, 0x2, 0x2, 0x2})
+	m.SetDLVlan(uint16(4096))
+	m.SetWildcardNWSrc(24)
+	fm.SetMatch(m)
+	fm.SetCookie(uint64(111))
+	fm.SetIdleTimeout(uint16(65535))
+	actOut := v10.NewActionOutput()
+	actOut.SetPort(uint16(555))
+	actOut.SetMaxLen(uint16(65535))
+	fm.SetAction(actOut)
+	fm.SetFlags(openflow.CheckOverlap)
+	data, err := fm.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data), nil
 }

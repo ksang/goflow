@@ -1,8 +1,9 @@
 package v10
 
-import(
+import (
 	"github.com/ksang/goflow/openflow"
 )
+
 // Hello share the same interface and struct as echo
 func NewHello(xid uint32) openflow.Echo {
 	return &echo{

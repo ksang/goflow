@@ -1,17 +1,17 @@
 package v10
 
-import(
+import (
 	"encoding/binary"
 	"github.com/ksang/goflow/openflow"
 )
 
 type packetOut struct {
 	openflow.Message
-	bufferID 		uint32
-	inPort   		uint16
-	actionsLength  	uint16
-	action   		[]openflow.Action
-	data     		[]byte
+	bufferID      uint32
+	inPort        uint16
+	actionsLength uint16
+	action        []openflow.Action
+	data          []byte
 }
 
 func (p *packetOut) BufferID() uint32 {
@@ -64,7 +64,7 @@ func (p *packetOut) MarshalBinary() ([]byte, error) {
 	if int(p.actionsLength) != actionsLen {
 		return nil, openflow.ErrInvalidDataLength
 	}
-	// packetOutLen = bufferID(4 bytes) + inPort(2 bytes) + 
+	// packetOutLen = bufferID(4 bytes) + inPort(2 bytes) +
 	//			actionsLength(2 bytes) + actionsLen + dataLen
 	packetOutLen := 8 + int(actionsLen) + len(p.data)
 	v := make([]byte, packetOutLen)
@@ -79,7 +79,7 @@ func (p *packetOut) MarshalBinary() ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		copy(v[lastPosition:lastPosition + actLen], actPayload)
+		copy(v[lastPosition:lastPosition+actLen], actPayload)
 		lastPosition += actLen
 	}
 	if len(p.data) > 0 {
@@ -106,19 +106,20 @@ func (p *packetOut) UnmarshalBinary(data []byte) error {
 	p.actionsLength = binary.BigEndian.Uint16(payload[6:8])
 	actLen := int(p.actionsLength)
 	// packet size smaller than actions length
-	if actLen + 8 > len(payload) {
+	if actLen+8 > len(payload) {
 		return openflow.ErrInvalidDataLength
 	}
-	for i := 8; i < actLen + 8; {
+	for i := 8; i < actLen+8; {
 		act := NewActionHead()
-		if err := act.UnmarshalActionHead(payload[i:]); err != nil {
+		if err := act.UnmarshalBinary(payload[i:]); err != nil {
 			return err
 		}
 		i += int(act.Length())
-	} 
+		p.action = append(p.action, act)
+	}
 	// has data
-	if len(payload) > actLen + 8 {
-		p.data = payload[actLen + 8:]
+	if len(payload) > actLen+8 {
+		p.data = payload[actLen+8:]
 	}
 	return nil
 }

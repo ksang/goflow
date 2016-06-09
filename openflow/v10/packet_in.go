@@ -1,17 +1,17 @@
 package v10
 
-import(
+import (
 	"encoding/binary"
 	"github.com/ksang/goflow/openflow"
 )
 
 type packetIn struct {
 	openflow.Message
-	bufferID 		uint32
-	totalLength   	uint16
-	inPort   		uint16
-	reason   		uint8
-	data     		[]byte
+	bufferID    uint32
+	totalLength uint16
+	inPort      uint16
+	reason      uint8
+	data        []byte
 }
 
 func (p *packetIn) BufferID() uint32 {
@@ -75,7 +75,7 @@ func (p *packetIn) MarshalBinary() ([]byte, error) {
 	if int(p.totalLength) != len(p.data) {
 		return nil, openflow.ErrInvalidDataLength
 	}
-	v := make([]byte, p.totalLength + 10)
+	v := make([]byte, p.totalLength+10)
 	binary.BigEndian.PutUint32(v[0:4], p.bufferID)
 	binary.BigEndian.PutUint16(v[4:6], p.totalLength)
 	binary.BigEndian.PutUint16(v[6:8], p.inPort)
@@ -87,7 +87,6 @@ func (p *packetIn) MarshalBinary() ([]byte, error) {
 	p.SetPayload(v)
 	return p.Message.MarshalBinary()
 }
-
 
 func (p *packetIn) UnmarshalBinary(data []byte) error {
 	if err := p.Message.UnmarshalBinary(data); err != nil {

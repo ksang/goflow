@@ -1,6 +1,6 @@
 package v10
 
-import(
+import (
 	"encoding/binary"
 	"github.com/ksang/goflow/openflow"
 )
@@ -8,7 +8,7 @@ import(
 type vendor struct {
 	openflow.Message
 	vendorID uint32
-	data []byte
+	data     []byte
 }
 
 func (v *vendor) VendorID() uint32 {
@@ -32,9 +32,9 @@ func (v *vendor) SetData(data []byte) error {
 }
 
 func (v *vendor) MarshalBinary() ([]byte, error) {
-	tmp := make([]byte, 4 + len(v.data))
+	tmp := make([]byte, 4+len(v.data))
 	binary.BigEndian.PutUint32(tmp[0:4], v.vendorID)
-	if len(v.data) > 0{
+	if len(v.data) > 0 {
 		copy(tmp[4:], v.data)
 	}
 	v.SetPayload(tmp)

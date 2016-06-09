@@ -1,12 +1,12 @@
 package v10
 
-import(
+import (
 	"github.com/ksang/goflow/openflow"
 )
 
 type echo struct {
 	openflow.Message
-	err error
+	err  error
 	data []byte
 }
 

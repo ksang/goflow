@@ -2,8 +2,8 @@ package pktgenerator
 
 import (
 	"log"
-	"time"
 	"testing"
+	"time"
 )
 
 func TestOpenFlow(t *testing.T) {
@@ -12,10 +12,10 @@ func TestOpenFlow(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	ofpkt, err := NewPortStatusPkt("127.0.0.1:6633")
+	ofpkt, err := NewFlowModPkt("127.0.0.1:6633")
 	if err != nil {
 		t.Error(err)
-		return 
+		return
 	}
 	log.Println("Sending OF packets.")
 	if err = SendMany(1, &ofpkt); err != nil {
