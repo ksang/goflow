@@ -205,3 +205,17 @@ func NewFlowModPkt(dst string) (OpenFlowPkt, error) {
 	}
 	return CreateOFPkt(dst, data), nil
 }
+
+func NewPortModPkt(dst string) (OpenFlowPkt, error) {
+	pm := v10.NewPortMod(uint32(23334))
+	pm.SetPort(openflow.Flood)
+	pm.SetHWAddr([]byte{0x1, 0x1, 0x1, 0x1, 0x1, 0x1})
+	pm.SetConfig(openflow.NoRecvSTP)
+	pm.SetMask(0x7f)
+	pm.SetAdvertise(openflow.FD_10GB|openflow.Fiber)
+	data, err := pm.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data), nil
+}

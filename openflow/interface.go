@@ -280,3 +280,19 @@ type FlowMod interface {
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
 }
+
+type PortMod interface {
+	MessageDecoder
+	Port() PortID
+	SetPort(PortID)
+	HWAddr() net.HardwareAddr
+	SetHWAddr(net.HardwareAddr)
+	Config() PortConfig
+	SetConfig(PortConfig)
+	Mask() uint32
+	SetMask(uint32) error
+	Advertise() PortFeature
+	SetAdvertise(PortFeature)
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
