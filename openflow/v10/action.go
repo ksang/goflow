@@ -88,29 +88,29 @@ type ActionVendor interface {
 	SetVendor(uint32)
 }
 
-type actionHead struct {
+type actionHeader struct {
 	actionType uint16
 	length     uint16 // the length of entire action block
 	payload    []byte
 }
 
-func (a *actionHead) Type() uint16 {
+func (a *actionHeader) Type() uint16 {
 	return a.actionType
 }
 
-func (a *actionHead) SetType(t uint16) {
+func (a *actionHeader) SetType(t uint16) {
 	a.actionType = t
 }
 
-func (a *actionHead) Length() uint16 {
+func (a *actionHeader) Length() uint16 {
 	return a.length
 }
 
-func (a *actionHead) Payload() []byte {
+func (a *actionHeader) Payload() []byte {
 	return a.payload
 }
 
-func (a *actionHead) SetPayload(payload []byte) error {
+func (a *actionHeader) SetPayload(payload []byte) error {
 	if payload == nil {
 		return openflow.ErrInvalidDataLength
 	}
@@ -120,7 +120,7 @@ func (a *actionHead) SetPayload(payload []byte) error {
 	return nil
 }
 
-func (a *actionHead) MarshalBinary() ([]byte, error) {
+func (a *actionHeader) MarshalBinary() ([]byte, error) {
 	if a.length == uint16(0) {
 		a.length = uint16(4)
 	}
@@ -137,7 +137,7 @@ func (a *actionHead) MarshalBinary() ([]byte, error) {
 	return v, nil
 }
 
-func (a *actionHead) UnmarshalBinary(data []byte) error {
+func (a *actionHeader) UnmarshalBinary(data []byte) error {
 	if data == nil || len(data) < 4 {
 		return openflow.ErrInvalidPacketLength
 	}
@@ -152,13 +152,13 @@ func (a *actionHead) UnmarshalBinary(data []byte) error {
 	return nil
 }
 
-func NewActionHead() openflow.Action {
-	return &actionHead{}
+func NewActionHeader() openflow.Action {
+	return &actionHeader{}
 }
 
 // action output definitions
 type actionOutput struct {
-	actionHead
+	actionHeader
 	port   uint16
 	maxLen uint16
 }
@@ -190,11 +190,11 @@ func (ao *actionOutput) MarshalBinary() ([]byte, error) {
 	if err := ao.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return ao.actionHead.MarshalBinary()
+	return ao.actionHeader.MarshalBinary()
 }
 
 func (ao *actionOutput) UnmarshalBinary(data []byte) error {
-	if err := ao.actionHead.UnmarshalBinary(data); err != nil {
+	if err := ao.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := ao.Payload()
@@ -208,7 +208,7 @@ func (ao *actionOutput) UnmarshalBinary(data []byte) error {
 
 func NewActionOutput() ActionOutput {
 	return &actionOutput{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_OUTPUT,
 			length:     8,
 		},
@@ -217,7 +217,7 @@ func NewActionOutput() ActionOutput {
 
 // action SetVLANVID definitions
 type actionSetVLANVID struct {
-	actionHead
+	actionHeader
 	vlanVID uint16
 }
 
@@ -236,11 +236,11 @@ func (as *actionSetVLANVID) MarshalBinary() ([]byte, error) {
 	if err := as.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return as.actionHead.MarshalBinary()
+	return as.actionHeader.MarshalBinary()
 }
 
 func (as *actionSetVLANVID) UnmarshalBinary(data []byte) error {
-	if err := as.actionHead.UnmarshalBinary(data); err != nil {
+	if err := as.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := as.Payload()
@@ -254,7 +254,7 @@ func (as *actionSetVLANVID) UnmarshalBinary(data []byte) error {
 
 func NewActionSetVLANVID() ActionSetVLANVID {
 	return &actionSetVLANVID{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_VLAN_VID,
 			length:     8,
 		},
@@ -263,7 +263,7 @@ func NewActionSetVLANVID() ActionSetVLANVID {
 
 // action SetVLANPCP definitions
 type actionSetVLANPCP struct {
-	actionHead
+	actionHeader
 	vlanPCP uint8
 }
 
@@ -282,11 +282,11 @@ func (as *actionSetVLANPCP) MarshalBinary() ([]byte, error) {
 	if err := as.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return as.actionHead.MarshalBinary()
+	return as.actionHeader.MarshalBinary()
 }
 
 func (as *actionSetVLANPCP) UnmarshalBinary(data []byte) error {
-	if err := as.actionHead.UnmarshalBinary(data); err != nil {
+	if err := as.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := as.Payload()
@@ -300,7 +300,7 @@ func (as *actionSetVLANPCP) UnmarshalBinary(data []byte) error {
 
 func NewActionSetVLANPCP() ActionSetVLANPCP {
 	return &actionSetVLANPCP{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_VLAN_PCP,
 			length:     8,
 		},
@@ -309,20 +309,20 @@ func NewActionSetVLANPCP() ActionSetVLANPCP {
 
 // action StripVLAN definitions
 type actionStripVLAN struct {
-	actionHead
+	actionHeader
 }
 
 func (as *actionStripVLAN) MarshalBinary() ([]byte, error) {
-	return as.actionHead.MarshalBinary()
+	return as.actionHeader.MarshalBinary()
 }
 
 func (as *actionStripVLAN) UnmarshalBinary(data []byte) error {
-	return as.actionHead.UnmarshalBinary(data)
+	return as.actionHeader.UnmarshalBinary(data)
 }
 
 func NewActionStripVLAN() ActionStripVLAN {
 	return &actionSetVLANVID{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_STRIP_VLAN,
 			length:     4,
 		},
@@ -331,7 +331,7 @@ func NewActionStripVLAN() ActionStripVLAN {
 
 // action SetDLSrc/Dst definitions
 type actionSetDL struct {
-	actionHead
+	actionHeader
 	mac net.HardwareAddr
 }
 
@@ -358,11 +358,11 @@ func (as *actionSetDL) MarshalBinary() ([]byte, error) {
 	if err := as.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return as.actionHead.MarshalBinary()
+	return as.actionHeader.MarshalBinary()
 }
 
 func (as *actionSetDL) UnmarshalBinary(data []byte) error {
-	if err := as.actionHead.UnmarshalBinary(data); err != nil {
+	if err := as.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := as.Payload()
@@ -376,7 +376,7 @@ func (as *actionSetDL) UnmarshalBinary(data []byte) error {
 
 func NewActionSetDLSrc() ActionSetDLSrc {
 	return &actionSetDL{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_DL_SRC,
 			length:     16,
 		},
@@ -385,7 +385,7 @@ func NewActionSetDLSrc() ActionSetDLSrc {
 
 func NewActionSetDLDst() ActionSetDLDst {
 	return &actionSetDL{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_DL_DST,
 			length:     16,
 		},
@@ -394,7 +394,7 @@ func NewActionSetDLDst() ActionSetDLDst {
 
 // action SetNWSrc/Dst definitions
 type actionSetNW struct {
-	actionHead
+	actionHeader
 	ip net.IP
 }
 
@@ -420,11 +420,11 @@ func (as *actionSetNW) MarshalBinary() ([]byte, error) {
 	if err := as.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return as.actionHead.MarshalBinary()
+	return as.actionHeader.MarshalBinary()
 }
 
 func (as *actionSetNW) UnmarshalBinary(data []byte) error {
-	if err := as.actionHead.UnmarshalBinary(data); err != nil {
+	if err := as.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := as.Payload()
@@ -437,7 +437,7 @@ func (as *actionSetNW) UnmarshalBinary(data []byte) error {
 
 func NewActionSetNWSrc() ActionSetNWSrc {
 	return &actionSetNW{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_NW_SRC,
 			length:     8,
 		},
@@ -446,7 +446,7 @@ func NewActionSetNWSrc() ActionSetNWSrc {
 
 func NewActionSetNWDst() ActionSetNWDst {
 	return &actionSetNW{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_NW_DST,
 			length:     8,
 		},
@@ -455,7 +455,7 @@ func NewActionSetNWDst() ActionSetNWDst {
 
 // action SetVLANPCP definitions
 type actionSetNWTos struct {
-	actionHead
+	actionHeader
 	nwTos uint8
 }
 
@@ -474,11 +474,11 @@ func (as *actionSetNWTos) MarshalBinary() ([]byte, error) {
 	if err := as.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return as.actionHead.MarshalBinary()
+	return as.actionHeader.MarshalBinary()
 }
 
 func (as *actionSetNWTos) UnmarshalBinary(data []byte) error {
-	if err := as.actionHead.UnmarshalBinary(data); err != nil {
+	if err := as.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := as.Payload()
@@ -492,7 +492,7 @@ func (as *actionSetNWTos) UnmarshalBinary(data []byte) error {
 
 func NewActionSetNWTos() ActionSetNWTos {
 	return &actionSetNWTos{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_NW_TOS,
 			length:     8,
 		},
@@ -501,7 +501,7 @@ func NewActionSetNWTos() ActionSetNWTos {
 
 // action SetTPSrc/Dst definitions
 type actionSetTP struct {
-	actionHead
+	actionHeader
 	port uint16
 }
 
@@ -524,11 +524,11 @@ func (as *actionSetTP) MarshalBinary() ([]byte, error) {
 	if err := as.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return as.actionHead.MarshalBinary()
+	return as.actionHeader.MarshalBinary()
 }
 
 func (as *actionSetTP) UnmarshalBinary(data []byte) error {
-	if err := as.actionHead.UnmarshalBinary(data); err != nil {
+	if err := as.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := as.Payload()
@@ -542,7 +542,7 @@ func (as *actionSetTP) UnmarshalBinary(data []byte) error {
 
 func NewActionSetTPSrc() ActionSetTPSrc {
 	return &actionSetTP{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_TP_SRC,
 			length:     8,
 		},
@@ -551,7 +551,7 @@ func NewActionSetTPSrc() ActionSetTPSrc {
 
 func NewActionSetTPDst() ActionSetTPDst {
 	return &actionSetTP{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_SET_TP_DST,
 			length:     8,
 		},
@@ -560,7 +560,7 @@ func NewActionSetTPDst() ActionSetTPDst {
 
 // action Enqueue definitions
 type actionEnqueue struct {
-	actionHead
+	actionHeader
 	port    uint16
 	queueID uint32
 }
@@ -593,11 +593,11 @@ func (ae *actionEnqueue) MarshalBinary() ([]byte, error) {
 	if err := ae.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return ae.actionHead.MarshalBinary()
+	return ae.actionHeader.MarshalBinary()
 }
 
 func (ae *actionEnqueue) UnmarshalBinary(data []byte) error {
-	if err := ae.actionHead.UnmarshalBinary(data); err != nil {
+	if err := ae.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := ae.Payload()
@@ -612,7 +612,7 @@ func (ae *actionEnqueue) UnmarshalBinary(data []byte) error {
 
 func NewActionEnqueue() ActionEnqueue {
 	return &actionEnqueue{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_ENQUEUE,
 			length:     16,
 		},
@@ -621,7 +621,7 @@ func NewActionEnqueue() ActionEnqueue {
 
 // action Vendor definitions
 type actionVendor struct {
-	actionHead
+	actionHeader
 	vendor uint32
 }
 
@@ -639,11 +639,11 @@ func (av *actionVendor) MarshalBinary() ([]byte, error) {
 	if err := av.SetPayload(v); err != nil {
 		return nil, err
 	}
-	return av.actionHead.MarshalBinary()
+	return av.actionHeader.MarshalBinary()
 }
 
 func (av *actionVendor) UnmarshalBinary(data []byte) error {
-	if err := av.actionHead.UnmarshalBinary(data); err != nil {
+	if err := av.actionHeader.UnmarshalBinary(data); err != nil {
 		return err
 	}
 	payload := av.Payload()
@@ -656,7 +656,7 @@ func (av *actionVendor) UnmarshalBinary(data []byte) error {
 
 func NewActionVendor() ActionVendor {
 	return &actionVendor{
-		actionHead: actionHead{
+		actionHeader: actionHeader{
 			actionType: OFPAT_VENDOR,
 			length:     8,
 		},

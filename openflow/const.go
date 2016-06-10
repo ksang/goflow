@@ -121,3 +121,15 @@ const (
 	SET_TP_DST
 	ENQUEUE
 )
+
+// StatRequest/Response type
+type StatsType uint16
+const (
+	STATS_Description StatsType = iota
+	STATS_Flow
+	STATS_Aggregate
+	STATS_Table
+	STATS_Port
+	STATS_Queue
+	STATS_Vendor
+)

@@ -144,5 +144,6 @@ func (f *flowRemoved) UnmarshalBinary(data []byte) error {
 func NewFlowRemoved(xid uint32) openflow.FlowRemoved {
 	return &flowRemoved{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_FLOW_REMOVED, xid),
+		match : NewMatch(),
 	}
 }

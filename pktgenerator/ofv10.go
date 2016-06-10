@@ -219,3 +219,12 @@ func NewPortModPkt(dst string) (OpenFlowPkt, error) {
 	}
 	return CreateOFPkt(dst, data), nil
 }
+
+func NewStatsRequestFlowPkt(dst string) (OpenFlowPkt, error) {
+	srf := v10.NewStatsReuqestFlow(uint32(23334))
+	data, err := srf.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data), nil
+}

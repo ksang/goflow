@@ -296,3 +296,19 @@ type PortMod interface {
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
 }
+
+type StatsRequest interface {
+	MessageDecoder
+	Type() StatsType
+	SetType(StatsType)
+	Flags() uint16
+	SetFlags(uint16)
+	StatsPayload() []byte
+	SetStatsPayload([]byte)
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
+// response shares the same structure
+type StatsReply interface {
+	StatsRequest
+}

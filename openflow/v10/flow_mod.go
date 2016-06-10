@@ -134,7 +134,7 @@ func (f *flowMod) UnmarshalBinary(data []byte) error {
 		return openflow.ErrInvalidPacketLength
 	}
 	f.match = NewMatch()
-	f.action = NewActionHead()
+	f.action = NewActionHeader()
 	if err := f.match.UnmarshalBinary(payload[0:40]); err != nil {
 		return err
 	}
@@ -155,5 +155,6 @@ func (f *flowMod) UnmarshalBinary(data []byte) error {
 func NewFlowMod(xid uint32) openflow.FlowMod {
 	return &flowMod{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_FLOW_MOD, xid),
+		match  : NewMatch()
 	}
 }

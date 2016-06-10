@@ -59,27 +59,6 @@ const (
 	OFPAT_VENDOR       = 0xffff
 )
 
-// Openflow port settings
-const (
-	/* Maximum number of physical switch ports. */
-	OFPP_MAX = 0xff00
-
-	/* Fake output "ports". */
-	OFPP_IN_PORT = 0xfff8 /* Send the packet out the input port.  This
-	   virtual port must be explicitly used
-	   in order to send back out of the input
-	   port. */
-	OFPP_TABLE = 0xfff9 /* Perform actions in flow table.
-	   NB: This can only be the destination
-	   port for packet-out messages. */
-	OFPP_FLOOD = 0xfffb /* Process with normal L2/L3 switching. */
-	OFPP_ALL   = 0xfffc /* All physical ports except input port and
-	   those disabled by STP. */
-	OFPP_CONTROLLER = 0xfffd /* Send to controller. */
-	OFPP_LOCAL      = 0xfffe /* Local openflow "port". */
-	OFPP_NONE       = 0xffff /* Not associated with a physical port. */
-)
-
 const (
 	OFPFW_IN_PORT     = 1 << 0  /* Switch input port. */
 	OFPFW_DL_VLAN     = 1 << 1  /* VLAN id. */
@@ -91,21 +70,6 @@ const (
 	OFPFW_TP_DST      = 1 << 7  /* TCP/UDP destination port. */
 	OFPFW_DL_VLAN_PCP = 1 << 20 /* VLAN priority. */
 	OFPFW_NW_TOS      = 1 << 21 /* IP ToS (DSCP field, 6 bits). */
-)
-
-const (
-	OFPPF_10MB_HD    = 1 << 0  /* 10 Mb half-duplex rate support. */
-	OFPPF_10MB_FD    = 1 << 1  /* 10 Mb full-duplex rate support. */
-	OFPPF_100MB_HD   = 1 << 2  /* 100 Mb half-duplex rate support. */
-	OFPPF_100MB_FD   = 1 << 3  /* 100 Mb full-duplex rate support. */
-	OFPPF_1GB_HD     = 1 << 4  /* 1 Gb half-duplex rate support. */
-	OFPPF_1GB_FD     = 1 << 5  /* 1 Gb full-duplex rate support. */
-	OFPPF_10GB_FD    = 1 << 6  /* 10 Gb full-duplex rate support. */
-	OFPPF_COPPER     = 1 << 7  /* Copper medium. */
-	OFPPF_FIBER      = 1 << 8  /* Fiber medium. */
-	OFPPF_AUTONEG    = 1 << 9  /* Auto-negotiation. */
-	OFPPF_PAUSE      = 1 << 10 /* Pause. */
-	OFPPF_PAUSE_ASYM = 1 << 11 /* Asymmetric pause. */
 )
 
 const (

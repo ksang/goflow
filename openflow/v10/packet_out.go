@@ -110,7 +110,7 @@ func (p *packetOut) UnmarshalBinary(data []byte) error {
 		return openflow.ErrInvalidDataLength
 	}
 	for i := 8; i < actLen+8; {
-		act := NewActionHead()
+		act := NewActionHeader()
 		if err := act.UnmarshalBinary(payload[i:]); err != nil {
 			return err
 		}
