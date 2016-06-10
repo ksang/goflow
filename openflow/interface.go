@@ -18,24 +18,24 @@ type Action interface {
 
 // Port is a structure describes a port
 type Port interface {
-	PortID() uint16
-	SetPortID(uint16)
+	PortID() PortID
+	SetPortID(PortID)
 	HWAddr() net.HardwareAddr
 	SetHWAddr(net.HardwareAddr) error
 	Name() string
 	SetName(string) error
-	Config() uint32
-	SetConfig(uint32)
-	State() uint32
-	SetState(uint32)
-	Curr() uint32
-	SetCurr(uint32)
-	Advertised() uint32
-	SetAdvertised(uint32)
-	Supported() uint32
-	SetSupported(uint32)
-	Peer() uint32
-	SetPeer(uint32)
+	Config() PortConfig
+	SetConfig(PortConfig)
+	State() PortState
+	SetState(PortState)
+	Curr() PortFeature
+	SetCurr(PortFeature)
+	Advertised() PortFeature
+	SetAdvertised(PortFeature)
+	Supported() PortFeature
+	SetSupported(PortFeature)
+	Peer() PortFeature
+	SetPeer(PortFeature)
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
 }
@@ -148,10 +148,10 @@ type FeatureReply interface {
 	SetNumBuffers(uint32)
 	NumTables() uint8
 	SetNumTables(uint8)
-	Capabilities() uint32
-	SetCapabilities(uint32)
-	Actions() uint32
-	SetActions(uint32)
+	Capabilities() FeatureCapability
+	SetCapabilities(FeatureCapability)
+	Actions() FeatureAction
+	SetActions(FeatureAction)
 	Ports() []Port
 	AddPort(Port)
 	encoding.BinaryMarshaler

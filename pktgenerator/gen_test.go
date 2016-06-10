@@ -12,7 +12,7 @@ func TestOpenFlow(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	ofpkt, err := NewFlowModPkt("127.0.0.1:6633")
+	ofpkt, err := NewFeatureReplyPkt("127.0.0.1:6633")
 	if err != nil {
 		t.Error(err)
 		return

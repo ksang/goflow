@@ -122,10 +122,10 @@ func NewFeatureReplyPkt(dst string) (OpenFlowPkt, error) {
 	feature.SetDPID(uint64(111111))
 	feature.SetNumBuffers(uint32(8))
 	feature.SetNumTables(uint8(6))
-	feature.SetCapabilities(v10.CAP_FLOW_STATS | v10.CAP_TABLE_STATS)
-	feature.SetActions(v10.ACT_OUTPUT | v10.ACT_ENQUEUE)
-	p1, err := v10.NewPort(uint16(1), []byte{0x01, 0x02, 0x03, 0x04, 0x05, 0x06}, "port no.1")
-	p2, err := v10.NewPort(uint16(2), []byte{0x11, 0x22, 0x33, 0x44, 0x55, 0x66}, "port no.2")
+	feature.SetCapabilities(openflow.FLOW_STATS | openflow.TABLE_STATS)
+	feature.SetActions(openflow.OUTPUT | openflow.ENQUEUE)
+	p1, err := v10.NewPort(openflow.PortID(1), []byte{0x01, 0x02, 0x03, 0x04, 0x05, 0x06}, "port no.1")
+	p2, err := v10.NewPort(openflow.PortID(2), []byte{0x11, 0x22, 0x33, 0x44, 0x55, 0x66}, "port no.2")
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
@@ -171,7 +171,7 @@ func NewFlowRemovedPkt(dst string) (OpenFlowPkt, error) {
 
 func NewPortStatusPkt(dst string) (OpenFlowPkt, error) {
 	ps := v10.NewPortStatus(uint32(23334))
-	p1, err := v10.NewPort(uint16(1), []byte{0x01, 0x02, 0x03, 0x04, 0x05, 0x06}, "port no.1")
+	p1, err := v10.NewPort(openflow.PortID(1), []byte{0x01, 0x02, 0x03, 0x04, 0x05, 0x06}, "port no.1")
 	ps.SetPort(p1)
 	ps.SetReason(openflow.PortModified)
 	data, err := ps.MarshalBinary()

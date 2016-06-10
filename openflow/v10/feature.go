@@ -28,8 +28,8 @@ type featureReply struct {
 	dpid         uint64
 	numBuffers   uint32
 	numTables    uint8
-	capabilities uint32
-	actions      uint32
+	capabilities openflow.FeatureCapability
+	actions      openflow.FeatureAction
 	ports        []openflow.Port
 }
 
@@ -57,19 +57,19 @@ func (f *featureReply) SetNumTables(nt uint8) {
 	f.numTables = nt
 }
 
-func (f *featureReply) Capabilities() uint32 {
+func (f *featureReply) Capabilities() openflow.FeatureCapability {
 	return f.capabilities
 }
 
-func (f *featureReply) SetCapabilities(c uint32) {
+func (f *featureReply) SetCapabilities(c openflow.FeatureCapability) {
 	f.capabilities = c
 }
 
-func (f *featureReply) Actions() uint32 {
+func (f *featureReply) Actions() openflow.FeatureAction {
 	return f.actions
 }
 
-func (f *featureReply) SetActions(a uint32) {
+func (f *featureReply) SetActions(a openflow.FeatureAction) {
 	f.actions = a
 }
 
@@ -89,8 +89,8 @@ func (f *featureReply) MarshalBinary() ([]byte, error) {
 	binary.BigEndian.PutUint32(v[8:12], f.numBuffers)
 	v[12] = f.numTables
 	// v[13:16] is padding
-	binary.BigEndian.PutUint32(v[16:20], f.capabilities)
-	binary.BigEndian.PutUint32(v[20:24], f.actions)
+	binary.BigEndian.PutUint32(v[16:20], uint32(f.capabilities))
+	binary.BigEndian.PutUint32(v[20:24], uint32(f.actions))
 	// Marshal ports
 	pos := 24
 	for _, p := range f.ports {
@@ -118,8 +118,8 @@ func (f *featureReply) UnmarshalBinary(data []byte) error {
 	f.numBuffers = binary.BigEndian.Uint32(payload[8:12])
 	f.numTables = payload[12]
 	// payload[13:16] is padding
-	f.capabilities = binary.BigEndian.Uint32(payload[16:20])
-	f.actions = binary.BigEndian.Uint32(payload[20:24])
+	f.capabilities = openflow.FeatureCapability(binary.BigEndian.Uint32(payload[16:20]))
+	f.actions = openflow.FeatureAction(binary.BigEndian.Uint32(payload[20:24]))
 	for pos := 24; pos < len(payload); pos += 48 {
 		port := NewEmptyPort()
 		if err := port.UnmarshalBinary(payload[pos : pos+48]); err != nil {
