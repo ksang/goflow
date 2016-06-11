@@ -312,3 +312,23 @@ type StatsRequest interface {
 type StatsReply interface {
 	StatsRequest
 }
+
+type BarrierRequest interface {
+	MessageDecoder
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
+
+type BarrierReply interface {
+	MessageDecoder
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
+
+type QueueGetConfigRequest interface {
+	MessageDecoder
+	Port() uint16
+	SetPort(uint16) error
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}

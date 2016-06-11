@@ -155,6 +155,6 @@ func (f *flowMod) UnmarshalBinary(data []byte) error {
 func NewFlowMod(xid uint32) openflow.FlowMod {
 	return &flowMod{
 		Message: openflow.NewMessage(openflow.OF10_VERSION, OFPT_FLOW_MOD, xid),
-		match  : NewMatch()
+		match  : NewMatch(),
 	}
 }

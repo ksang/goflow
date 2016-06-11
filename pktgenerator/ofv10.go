@@ -220,9 +220,25 @@ func NewPortModPkt(dst string) (OpenFlowPkt, error) {
 	return CreateOFPkt(dst, data), nil
 }
 
+func NewBarrierRequestPkt(dst string) (OpenFlowPkt, error) {
+	bq := v10.NewBarrierRequest(uint32(1234))
+	data, _ := bq.MarshalBinary()
+	return CreateOFPkt(dst, data), nil
+}
+
 func NewStatsRequestFlowPkt(dst string) (OpenFlowPkt, error) {
 	srf := v10.NewStatsReuqestFlow(uint32(23334))
 	data, err := srf.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data), nil
+}
+
+func NewQueueGetConfigRequestPkt(dst string) (OpenFlowPkt, error) {
+	qgr := v10.NewQueueGetConfigRequest(uint32(23334))
+	qgr.SetPort(uint16(233))
+	data, err := qgr.MarshalBinary()
 	if err != nil {
 		return OpenFlowPkt{}, err
 	}
