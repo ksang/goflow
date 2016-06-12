@@ -244,3 +244,21 @@ func NewQueueGetConfigRequestPkt(dst string) (OpenFlowPkt, error) {
 	}
 	return CreateOFPkt(dst, data), nil
 }
+
+func NewQueueGetConfigReplyPkt(dst string) (OpenFlowPkt, error) {
+	qgr := v10.NewQueueGetConfigReply(uint32(23334))
+	qgr.SetPort(uint16(233))
+	p1 := v10.NewQueue()
+	p1.SetQueueID(uint32(111))
+	p1.SetRate(uint16(111))
+	p2 := v10.NewQueue()
+	p2.SetQueueID(uint32(222))
+	p2.SetRate(uint16(222))
+	qgr.AddQueue(p1)
+	qgr.AddQueue(p2)
+	data, err := qgr.MarshalBinary()
+	if err != nil {
+		return OpenFlowPkt{}, err
+	}
+	return CreateOFPkt(dst, data), nil
+}

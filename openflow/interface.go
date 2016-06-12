@@ -95,6 +95,16 @@ type Match interface {
 	encoding.BinaryUnmarshaler
 }
 
+type Queue interface {
+	QueueID() uint32
+	SetQueueID(uint32)
+	Length() uint16
+	// Openflow 1.0 to 1.3 queue message only has one type of property: MinRate
+	Rate() uint16
+	SetRate(uint16)
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
 // Hello message interface
 // Share the same interface and struct as echo
 type Hello interface {
@@ -329,6 +339,16 @@ type QueueGetConfigRequest interface {
 	MessageDecoder
 	Port() uint16
 	SetPort(uint16) error
+	encoding.BinaryMarshaler
+	encoding.BinaryUnmarshaler
+}
+
+type QueueGetConfigReply interface {
+	MessageDecoder
+	Port() uint16
+	SetPort(uint16)
+	Queue() []Queue
+	AddQueue(Queue)
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
 }
