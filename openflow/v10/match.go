@@ -360,7 +360,6 @@ func (m *match) MarshalBinary() ([]byte, error) {
 	return data, nil
 }
 
-//TODO
 func (m *match) UnmarshalBinary(data []byte) error {
 	if len(data) != 40 {
 		return openflow.ErrInvalidPacketLength
